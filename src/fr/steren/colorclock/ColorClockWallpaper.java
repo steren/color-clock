@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010 Steren Giannini steren.giannini@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-public class CubeWallpaper2 extends WallpaperService {
+public class ColorClockWallpaper extends WallpaperService {
 
     public static final String SHARED_PREFS_NAME="cube2settings";
 
@@ -95,7 +96,7 @@ public class CubeWallpaper2 extends WallpaperService {
 
             mStartTime = SystemClock.elapsedRealtime();
 
-            mPrefs = CubeWallpaper2.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
+            mPrefs = ColorClockWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             onSharedPreferenceChanged(mPrefs, null);
         }
@@ -243,7 +244,7 @@ public class CubeWallpaper2 extends WallpaperService {
             mTime.normalize(false);
 
         	float[] color = new float[3];
-        	color[0] = mTime.minute * 360.0f / 60.0f ;
+        	color[0] = mTime.second * 360.0f / 60.0f ;
         	color[1] = (float) 0.8;
         	color[2] = (float) 0.8;
         	

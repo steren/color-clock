@@ -16,20 +16,20 @@
 
 package fr.steren.colorclock;
 
-import fr.steren.colorclock.CubeWallpaper2;
+import fr.steren.colorclock.ColorClockWallpaper;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class CubeWallpaper2Settings extends PreferenceActivity
+public class ColorClockWallpaperSettings extends PreferenceActivity
     implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         getPreferenceManager().setSharedPreferencesName(
-                CubeWallpaper2.SHARED_PREFS_NAME);
+                ColorClockWallpaper.SHARED_PREFS_NAME);
         addPreferencesFromResource(R.xml.cube2_settings);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(
                 this);
