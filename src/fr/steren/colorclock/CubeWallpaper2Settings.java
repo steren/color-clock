@@ -14,9 +14,9 @@
  * the License.
  */
 
-package com.example.android.livecubes.cube2;
+package fr.steren.colorclock;
 
-import com.example.android.livecubes.R;
+import fr.steren.colorclock.CubeWallpaper2;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
