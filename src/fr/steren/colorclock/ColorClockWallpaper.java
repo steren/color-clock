@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.text.format.Time;
 import android.view.MotionEvent;
@@ -32,17 +31,6 @@ import android.view.SurfaceHolder;
 public class ColorClockWallpaper extends WallpaperService {
 
     public static final String SHARED_PREFS_NAME="cube2settings";
-
-    static class ThreeDPoint {
-        float x;
-        float y;
-        float z;
-    }
-
-    static class ThreeDLine {
-        int startPoint;
-        int endPoint;
-    }
 
     @Override
     public void onCreate() {
@@ -56,22 +44,18 @@ public class ColorClockWallpaper extends WallpaperService {
 
     @Override
     public Engine onCreateEngine() {
-        return new CubeEngine();
+        return new ColorClockEngine();
     }
 
-    class CubeEngine extends Engine 
+    class ColorClockEngine extends Engine 
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         private final Handler mHandler = new Handler();
 
-        ThreeDPoint [] mOriginalPoints;
-        ThreeDPoint [] mRotatedPoints;
-        ThreeDLine [] mLines;
         private final Paint mPaint = new Paint();
         private float mOffset;
         private float mTouchX = -1;
         private float mTouchY = -1;
-        private long mStartTime;
         private float mCenterX;
         private float mCenterY;
 
@@ -85,7 +69,7 @@ public class ColorClockWallpaper extends WallpaperService {
         private boolean mVisible;
         private SharedPreferences mPrefs;
 
-        CubeEngine() {
+        ColorClockEngine() {
             // Create a Paint to draw the lines for our cube
             final Paint paint = mPaint;
             paint.setColor(0xffffffff);
@@ -93,8 +77,6 @@ public class ColorClockWallpaper extends WallpaperService {
             paint.setStrokeWidth(2);
             paint.setStrokeCap(Paint.Cap.ROUND);
             paint.setStyle(Paint.Style.STROKE);
-
-            mStartTime = SystemClock.elapsedRealtime();
 
             mPrefs = ColorClockWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
@@ -105,41 +87,6 @@ public class ColorClockWallpaper extends WallpaperService {
 
             String shape = prefs.getString("cube2_shape", "cube");
 
-            // read the 3D model from the resource
-            readModel(shape);
-        }
-
-        private void readModel(String prefix) {
-            // Read the model definition in from a resource.
-
-            // get the resource identifiers for the arrays for the selected shape
-            int pid = getResources().getIdentifier(prefix + "points", "array", getPackageName());
-            int lid = getResources().getIdentifier(prefix + "lines", "array", getPackageName());
-
-            String [] p = getResources().getStringArray(pid);
-            int numpoints = p.length;
-            mOriginalPoints = new ThreeDPoint[numpoints];
-            mRotatedPoints = new ThreeDPoint[numpoints];
-
-            for (int i = 0; i < numpoints; i++) {
-                mOriginalPoints[i] = new ThreeDPoint();
-                mRotatedPoints[i] = new ThreeDPoint();
-                String [] coord = p[i].split(" ");
-                mOriginalPoints[i].x = Float.valueOf(coord[0]);
-                mOriginalPoints[i].y = Float.valueOf(coord[1]);
-                mOriginalPoints[i].z = Float.valueOf(coord[2]);
-            }
-
-            String [] l = getResources().getStringArray(lid);
-            int numlines = l.length;
-            mLines = new ThreeDLine[numlines];
-
-            for (int i = 0; i < numlines; i++) {
-                mLines[i] = new ThreeDLine();
-                String [] idx = l[i].split(" ");
-                mLines[i].startPoint = Integer.valueOf(idx[0]);
-                mLines[i].endPoint = Integer.valueOf(idx[1]);
-            }
         }
 
         @Override
@@ -244,7 +191,7 @@ public class ColorClockWallpaper extends WallpaperService {
             mTime.normalize(false);
 
         	float[] color = new float[3];
-        	color[0] = mTime.second * 360.0f / 60.0f ;
+        	color[0] = ((mTime.minute * 60.0f + mTime.second) % 3600) * 360.0f / 3600.0f;
         	color[1] = (float) 0.8;
         	color[2] = (float) 0.8;
         	
@@ -252,54 +199,6 @@ public class ColorClockWallpaper extends WallpaperService {
         	c.restore();
         }
         
-        void drawCube(Canvas c) {
-            c.save();
-            c.translate(mCenterX, mCenterY);
-            c.drawColor(0xff000000);
-
-            long now = SystemClock.elapsedRealtime();
-            float xrot = ((float)(now - mStartTime)) / 1000;
-            float yrot = (0.5f - mOffset) * 2.0f;
-            rotateAndProjectPoints(xrot, yrot);
-            drawLines(c);
-            c.restore();
-        }
-
-        void rotateAndProjectPoints(float xrot, float yrot) {
-            int n = mOriginalPoints.length;
-            for (int i = 0; i < n; i++) {
-                // rotation around X-axis
-                ThreeDPoint p = mOriginalPoints[i];
-                float x = p.x;
-                float y = p.y;
-                float z = p.z;
-                float newy = (float)(Math.sin(xrot) * z + Math.cos(xrot) * y);
-                float newz = (float)(Math.cos(xrot) * z - Math.sin(xrot) * y);
-
-                // rotation around Y-axis
-                float newx = (float)(Math.sin(yrot) * newz + Math.cos(yrot) * x);
-                newz = (float)(Math.cos(yrot) * newz - Math.sin(yrot) * x);
-
-                // 3D-to-2D projection
-                float screenX = newx / (4 - newz / 400);
-                float screenY = newy / (4 - newz / 400);
-
-                mRotatedPoints[i].x = screenX;
-                mRotatedPoints[i].y = screenY;
-                mRotatedPoints[i].z = 0;
-            }
-        }
-
-        void drawLines(Canvas c) {
-            int n = mLines.length;
-            for (int i = 0; i < n; i++) {
-                ThreeDLine l = mLines[i];
-                ThreeDPoint start = mRotatedPoints[l.startPoint];
-                ThreeDPoint end = mRotatedPoints[l.endPoint];
-                c.drawLine(start.x, start.y, end.x, end.y, mPaint);
-            }
-        }
-
         void drawTouchPoint(Canvas c) {
             if (mTouchX >=0 && mTouchY >= 0) {
                 c.drawCircle(mTouchX, mTouchY, 80, mPaint);
