@@ -171,9 +171,8 @@ public class ColorClockWallpaper extends WallpaperService {
                 c = holder.lockCanvas();
                 if (c != null) {
                     // draw something
-                    //drawCube(c);
                 	drawColorbackground(c);
-                    drawTouchPoint(c);
+                    //drawTouchPoint(c);
                 }
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c);
