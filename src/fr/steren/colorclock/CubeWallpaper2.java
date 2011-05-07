@@ -18,19 +18,15 @@ package fr.steren.colorclock;
 
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
+import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-
-/*
- * This animated wallpaper draws a rotating wireframe shape. It is similar to
- * example #1, but has a choice of 2 shapes, which are user selectable and
- * defined in resources instead of in code.
- */
 
 public class CubeWallpaper2 extends WallpaperService {
 
@@ -78,6 +74,8 @@ public class CubeWallpaper2 extends WallpaperService {
         private float mCenterX;
         private float mCenterY;
 
+        private Time mTime;
+        
         private final Runnable mDrawCube = new Runnable() {
             public void run() {
                 drawFrame();
@@ -147,7 +145,11 @@ public class CubeWallpaper2 extends WallpaperService {
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
             setTouchEventsEnabled(true);
+            
+            mTime = new Time();
+            mTime.setToNow();
         }
+        
 
         @Override
         public void onDestroy() {
@@ -208,11 +210,6 @@ public class CubeWallpaper2 extends WallpaperService {
             super.onTouchEvent(event);
         }
 
-        /*
-         * Draw one frame of the animation. This method gets called repeatedly
-         * by posting a delayed Runnable. You can do any drawing you want in
-         * here. This example draws a wireframe cube.
-         */
         void drawFrame() {
             final SurfaceHolder holder = getSurfaceHolder();
             final Rect frame = holder.getSurfaceFrame();
@@ -224,7 +221,8 @@ public class CubeWallpaper2 extends WallpaperService {
                 c = holder.lockCanvas();
                 if (c != null) {
                     // draw something
-                    drawCube(c);
+                    //drawCube(c);
+                	drawColorbackground(c);
                     drawTouchPoint(c);
                 }
             } finally {
@@ -237,6 +235,22 @@ public class CubeWallpaper2 extends WallpaperService {
             }
         }
 
+        void drawColorbackground(Canvas c) {
+        	c.save();
+
+            final long millis = System.currentTimeMillis();
+            mTime.set(millis);
+            mTime.normalize(false);
+
+        	float[] color = new float[3];
+        	color[0] = mTime.minute * 360.0f / 60.0f ;
+        	color[1] = (float) 0.8;
+        	color[2] = (float) 0.8;
+        	
+        	c.drawColor(Color.HSVToColor(color));
+        	c.restore();
+        }
+        
         void drawCube(Canvas c) {
             c.save();
             c.translate(mCenterX, mCenterY);
