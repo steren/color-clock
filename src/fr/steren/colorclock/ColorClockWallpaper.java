@@ -32,6 +32,9 @@ public class ColorClockWallpaper extends WallpaperService {
 
     public static final String SHARED_PREFS_NAME="cube2settings";
 
+    public static final float SATURATION = 0.8f;
+    public static final float VALUE = 0.8f;
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -61,12 +64,11 @@ public class ColorClockWallpaper extends WallpaperService {
 
         private Time mTime;
         
-        private final Runnable mDrawCube = new Runnable() {
+        private final Runnable mDrawBackground = new Runnable() {
             public void run() {
                 drawFrame();
             }
         };
-        private boolean mVisible;
         private SharedPreferences mPrefs;
 
         ColorClockEngine() {
@@ -102,16 +104,17 @@ public class ColorClockWallpaper extends WallpaperService {
         @Override
         public void onDestroy() {
             super.onDestroy();
-            mHandler.removeCallbacks(mDrawCube);
+            mHandler.removeCallbacks(mDrawBackground);
         }
 
         @Override
         public void onVisibilityChanged(boolean visible) {
-            mVisible = visible;
             if (visible) {
                 drawFrame();
+                mTime = new Time();
+                mTime.setToNow();
             } else {
-                mHandler.removeCallbacks(mDrawCube);
+                mHandler.removeCallbacks(mDrawBackground);
             }
         }
 
@@ -132,8 +135,7 @@ public class ColorClockWallpaper extends WallpaperService {
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
-            mVisible = false;
-            mHandler.removeCallbacks(mDrawCube);
+            mHandler.removeCallbacks(mDrawBackground);
         }
 
         @Override
@@ -177,9 +179,9 @@ public class ColorClockWallpaper extends WallpaperService {
                 if (c != null) holder.unlockCanvasAndPost(c);
             }
 
-            mHandler.removeCallbacks(mDrawCube);
-            if (mVisible) {
-                mHandler.postDelayed(mDrawCube, 1000 / 25);
+            mHandler.removeCallbacks(mDrawBackground);
+            if (isVisible()) {
+                mHandler.postDelayed(mDrawBackground, 1000 / 25);
             }
         }
 
@@ -192,8 +194,8 @@ public class ColorClockWallpaper extends WallpaperService {
 
         	float[] color = new float[3];
         	color[0] = ((mTime.minute * 60.0f + mTime.second) % 3600) * 360.0f / 3600.0f;
-        	color[1] = (float) 0.8;
-        	color[2] = (float) 0.8;
+        	color[1] = SATURATION;
+        	color[2] = VALUE;
         	
         	c.drawColor(Color.HSVToColor(color));
         	c.restore();
