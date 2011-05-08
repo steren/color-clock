@@ -24,7 +24,7 @@
     <uses-feature android:name="android.software.live_wallpaper" />
 
     <application
-        android:icon="@drawable/ic_launcher_wallpaper" android:label="@string/appname">
+        android:icon="@drawable/ic_launcher" android:label="@string/appname">
 
         <service
             android:label="@string/wallpaper_name"
