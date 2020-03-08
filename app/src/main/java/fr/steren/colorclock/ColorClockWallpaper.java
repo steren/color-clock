@@ -20,12 +20,10 @@ package fr.steren.colorclock;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.text.format.Time;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 public class ColorClockWallpaper extends WallpaperService {
@@ -55,13 +53,6 @@ public class ColorClockWallpaper extends WallpaperService {
 
         private final Handler mHandler = new Handler();
 
-        private final Paint mPaint = new Paint();
-        private float mOffset;
-        private float mTouchX = -1;
-        private float mTouchY = -1;
-        private float mCenterX;
-        private float mCenterY;
-
         private Time mTime;
         
         private final Runnable mDrawBackground = new Runnable() {
@@ -72,14 +63,6 @@ public class ColorClockWallpaper extends WallpaperService {
         private SharedPreferences mPrefs;
 
         ColorClockEngine() {
-            // Create a Paint to draw the lines for our cube
-            final Paint paint = mPaint;
-            paint.setColor(0xffffffff);
-            paint.setAntiAlias(true);
-            paint.setStrokeWidth(2);
-            paint.setStrokeCap(Paint.Cap.ROUND);
-            paint.setStyle(Paint.Style.STROKE);
-
             mPrefs = ColorClockWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             onSharedPreferenceChanged(mPrefs, null);
@@ -87,7 +70,7 @@ public class ColorClockWallpaper extends WallpaperService {
 
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 
-            String shape = prefs.getString("cube2_shape", "cube");
+            //String shape = prefs.getString("cube2_shape", "cube");
 
         }
 
@@ -121,9 +104,6 @@ public class ColorClockWallpaper extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            // store the center of the surface, so we can draw the cube in the right spot
-            mCenterX = width/2.0f;
-            mCenterY = height/2.0f;
             drawFrame();
         }
 
@@ -141,38 +121,19 @@ public class ColorClockWallpaper extends WallpaperService {
         @Override
         public void onOffsetsChanged(float xOffset, float yOffset,
                 float xStep, float yStep, int xPixels, int yPixels) {
-            mOffset = xOffset;
             drawFrame();
         }
 
-        /*
-         * Store the position of the touch event so we can use it for drawing later
-         */
-        @Override
-        public void onTouchEvent(MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                mTouchX = event.getX();
-                mTouchY = event.getY();
-            } else {
-                mTouchX = -1;
-                mTouchY = -1;
-            }
-            super.onTouchEvent(event);
-        }
 
         void drawFrame() {
             final SurfaceHolder holder = getSurfaceHolder();
             final Rect frame = holder.getSurfaceFrame();
-            final int width = frame.width();
-            final int height = frame.height();
 
             Canvas c = null;
             try {
                 c = holder.lockCanvas();
                 if (c != null) {
-                    // draw something
                 	drawColorbackground(c);
-                    //drawTouchPoint(c);
                 }
             } finally {
                 if (c != null) holder.unlockCanvasAndPost(c);
@@ -199,11 +160,6 @@ public class ColorClockWallpaper extends WallpaperService {
         	c.drawColor(Color.HSVToColor(color));
         	c.restore();
         }
-        
-        void drawTouchPoint(Canvas c) {
-            if (mTouchX >=0 && mTouchY >= 0) {
-                c.drawCircle(mTouchX, mTouchY, 80, mPaint);
-            }
-        }
+
     }
 }
