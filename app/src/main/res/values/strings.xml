@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">colorclock</string>
+    <string name="wallpaper_name">Color Clock</string>
+    <string name="cube2_settings">Settings</string>
+    <string name="cube2_settings_title">Select shape</string>
+    <string name="cube2_settings_summary">Choose whether to display a cube or a dodecahedron</string>
+    <string name="appname">Color Clock</string>
+    <string name="wallpaper_author">Steren Giannini</string>
+    <string name="wallpaper_description">Know the time just by looking at the background color.</string>
+</resources>
