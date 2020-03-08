@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">colorclock</string>
     <string name="wallpaper_name">Color Clock</string>
     <string name="cube2_settings">Settings</string>
     <string name="cube2_settings_title">Select shape</string>
