@@ -28,7 +28,7 @@ import android.view.SurfaceHolder;
 
 public class ColorClockWallpaper extends WallpaperService {
 
-    public static final String SHARED_PREFS_NAME="cube2settings";
+    public static final String SHARED_PREFS_NAME = "cube2settings";
 
     public static final float SATURATION = 0.65f;
     public static final float VALUE = 0.8f;
