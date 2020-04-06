@@ -30,8 +30,8 @@ public class ColorClockWallpaper extends WallpaperService {
 
     public static final String SHARED_PREFS_NAME = "cube2settings";
 
-    public static final float SATURATION = 0.65f;
-    public static final float VALUE = 0.8f;
+    public float saturation = 0.65f;
+    public float value = 0.8f;
     
     @Override
     public void onCreate() {
@@ -69,9 +69,8 @@ public class ColorClockWallpaper extends WallpaperService {
         }
 
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-
-            //String shape = prefs.getString("cube2_shape", "cube");
-
+            value = Float.parseFloat(prefs.getString("value", "0.8"));
+            saturation = Float.parseFloat(prefs.getString("saturation", "0.65"));
         }
 
         @Override
@@ -154,8 +153,8 @@ public class ColorClockWallpaper extends WallpaperService {
 
         	float[] color = new float[3];
         	color[0] = ((mTime.minute * 60.0f + mTime.second) % 3600) * 360.0f / 3600.0f;
-        	color[1] = SATURATION;
-        	color[2] = VALUE;
+        	color[1] = saturation;
+        	color[2] = value;
         	
         	c.drawColor(Color.HSVToColor(color));
         	c.restore();

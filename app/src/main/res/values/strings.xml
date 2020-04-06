@@ -6,4 +6,9 @@
     <string name="appname">Color Clock</string>
     <string name="wallpaper_author">Steren Giannini</string>
     <string name="wallpaper_description">Know the time just by looking at the background color.</string>
+
+    <string name="settings_value_title">Brightness</string>
+    <string name="settings_value_summary">The brightness of the background</string>
+    <string name="settings_saturation_title">Saturation</string>
+    <string name="settings_saturation_summary">The color saturation of the background</string>
 </resources>
