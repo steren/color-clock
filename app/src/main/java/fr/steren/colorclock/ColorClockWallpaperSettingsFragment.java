@@ -8,7 +8,7 @@ public class ColorClockWallpaperSettingsFragment extends PreferenceFragmentCompa
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.cube2_settings, rootKey);
+        setPreferencesFromResource(R.xml.wallpaper_settings, rootKey);
     }
 
 }
