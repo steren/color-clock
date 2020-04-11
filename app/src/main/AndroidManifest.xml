@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android" package="fr.steren.colorclock">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="fr.steren.colorclock">
 
     <uses-feature android:name="android.software.live_wallpaper" />
 
     <application
-        android:icon="@mipmap/ic_launcher" android:label="@string/appname">
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/appname">
 
         <service
+            android:name=".ColorClockWallpaper"
             android:label="@string/wallpaper_name"
-            android:name="ColorClockWallpaper"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
-            <meta-data android:name="android.service.wallpaper" android:resource="@xml/cube2" />
-        </service>
-        <activity
-            android:label="@string/cube2_settings"
-            android:name="ColorClockWallpaperSettings"
-            android:theme="@android:style/Theme.Light.WallpaperSettings"
-            android:exported="true">
-        </activity>
 
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/cube2" />
+        </service>
+
+        <activity
+            android:name=".ColorClockWallpaperSettings"
+            android:exported="true"
+            android:label="@string/cube2_settings"
+            android:theme="@style/Theme.AppCompat"></activity>
     </application>
+
 </manifest>

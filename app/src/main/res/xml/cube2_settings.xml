@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        android:title="@string/cube2_settings"
-        android:key="cube2wallpaper_settings">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
-        android:key="value"
-        android:title="@string/settings_value_title"
-        android:summary="@string/settings_value_summary"
-        android:defaultValue="0.8"
-        android:inputType="numberDecimal"
+        app:key="value"
+        app:title="@string/settings_value_title"
+        app:summary="@string/settings_value_summary"
+        app:defaultValue="0.8"
+        app:useSimpleSummaryProvider="true"
         />
 
     <EditTextPreference
-        android:key="saturation"
-        android:title="@string/settings_saturation_title"
-        android:summary="@string/settings_saturation_summary"
-        android:defaultValue="0.65"
-        android:inputType="numberDecimal"
+        app:key="saturation"
+        app:title="@string/settings_saturation_title"
+        app:summary="@string/settings_saturation_summary"
+        app:defaultValue="0.65"
+        app:useSimpleSummaryProvider="true"
         />
 
 </PreferenceScreen>
