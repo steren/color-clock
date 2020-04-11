@@ -26,9 +26,9 @@ import android.service.wallpaper.WallpaperService;
 import android.text.format.Time;
 import android.view.SurfaceHolder;
 
-public class ColorClockWallpaper extends WallpaperService {
+import androidx.preference.PreferenceManager;
 
-    public static final String SHARED_PREFS_NAME = "cube2settings";
+public class ColorClockWallpaper extends WallpaperService {
 
     public float saturation = 0.65f;
     public float value = 0.8f;
@@ -63,7 +63,7 @@ public class ColorClockWallpaper extends WallpaperService {
         private SharedPreferences mPrefs;
 
         ColorClockEngine() {
-            mPrefs = ColorClockWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
+            mPrefs = PreferenceManager.getDefaultSharedPreferences(ColorClockWallpaper.this);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             onSharedPreferenceChanged(mPrefs, null);
         }
