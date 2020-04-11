@@ -30,8 +30,10 @@ import androidx.preference.PreferenceManager;
 
 public class ColorClockWallpaper extends WallpaperService {
 
-    public float saturation = 0.65f;
-    public float value = 0.8f;
+    private static final int defaultSaturation = 65;
+    private static final int defaultValue = 80;
+    public float saturation = defaultSaturation / 100f;
+    public float value = defaultValue / 100f;
     
     @Override
     public void onCreate() {
@@ -69,8 +71,8 @@ public class ColorClockWallpaper extends WallpaperService {
         }
 
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            value = Float.parseFloat(prefs.getString("value", "0.8"));
-            saturation = Float.parseFloat(prefs.getString("saturation", "0.65"));
+            value = prefs.getInt("value", defaultSaturation) / 100f;
+            saturation = prefs.getInt("saturation", defaultValue) / 100f;
         }
 
         @Override

@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
+    <SeekBarPreference
+        android:inputType="number"
         app:key="value"
         app:title="@string/settings_value_title"
         app:summary="@string/settings_value_summary"
-        app:defaultValue="0.8"
+        app:showSeekBarValue="true"
+        app:defaultValue="80"
         app:useSimpleSummaryProvider="true"
+        app:min="0"
+        android:max="100"
+        app:seekBarIncrement="1"
+        app:adjustable="true"
         />
 
-    <EditTextPreference
+    <SeekBarPreference
+        android:inputType="number"
         app:key="saturation"
         app:title="@string/settings_saturation_title"
         app:summary="@string/settings_saturation_summary"
-        app:defaultValue="0.65"
+        app:showSeekBarValue="true"
+        app:defaultValue="65"
         app:useSimpleSummaryProvider="true"
+        app:min="0"
+        android:max="100"
+        app:seekBarIncrement="1"
+        app:adjustable="true"
         />
 
 </PreferenceScreen>
